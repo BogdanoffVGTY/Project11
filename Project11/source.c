@@ -3,6 +3,14 @@
 #include <math.h>
 #include <stdlib.h>
 
+int** input_results(int num, int** arr);
+int** random_results(int num, int** arr);
+void print_results(int num, int** arr);
+int** sum_valuation(int num, int** arr, int** sums);
+int index_valuation(int number_of_participant);
+void print_table(int** sums, int number_of_participant);
+void print_to_file(int** sums, int index);
+
 int** input_results(int num, int** arr) {
     for (int i = 0; i < num; i++) {
         printf("Введите номер участника: ");
