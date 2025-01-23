@@ -1,110 +1,17 @@
 #include <stdio.h>
 #include <locale.h>
-#include <math.h>
+#include <math.h> 
 #include <stdlib.h>
 
 int** input_results(int num, int** arr);
 int** random_results(int num, int** arr);
-void print_results(int num, int** arr);
+int print_results(int num, int** arr);
 int** sum_valuation(int num, int** arr, int** sums);
 int index_valuation(int number_of_participant);
-void print_table(int** sums, int number_of_participant);
-void print_to_file(int** sums, int index);
+int print_table(int** sums, int number_of_participant);
+int print_to_file(int** sums, int index);
 
-int** input_results(int num, int** arr) {
-    for (int i = 0; i < num; i++) {
-        printf("Введите номер участника: ");
-        scanf_s("%d", &arr[i][0]);
-        for (int j = 1; j < 4; j++) {
-            printf("Введите результат участника #%d (попытка %d): ", i + 1, j);
-            scanf_s("%d", &arr[i][j]);
-        }
-    }
-    return arr;
-}
-
-int** random_results(int num, int** arr) {
-    for (int i = 0; i < num; i++) {
-        arr[i][0] = i + 1;
-        for (int j = 1; j < 4; j++) {
-            arr[i][j] = rand() % 100;
-        }
-    }
-    return arr;
-}
-
-void print_results(int num, int** arr) {
-    printf("\nРезультаты участников:\n");
-    printf("+-------------------+-------------------+-------------------+-------------------+\n");
-    printf("| Номер участника   | Первый забег      | Второй забег      | Третий забег      |\n");
-    printf("+-------------------+-------------------+-------------------+-------------------+\n");
-    for (int i = 0; i < num; i++) {
-        printf("| %-17d | %-17d | %-17d | %-17d |\n", arr[i][0], arr[i][1], arr[i][2], arr[i][3]);
-    }
-    printf("+-------------------+-------------------+-------------------+-------------------+\n");
-}
-
-int** sum_valuation(int num, int** arr, int** sums) {
-    for (int i = 0; i < num; i++) {
-        int sum = 0;
-        for (int j = 1; j < 4; j++) {
-            sum += arr[i][j];
-        }
-        sums[i][0] = arr[i][0];
-        sums[i][1] = sum;
-    }
-    for (int i = 0; i < num - 1; i++) {
-        for (int j = 0; j < num - i - 1; j++) {
-            if (sums[j][1] > sums[j + 1][1]) {
-                int temp_num = sums[j][0];
-                int temp_sum = sums[j][1];
-                sums[j][0] = sums[j + 1][0];
-                sums[j][1] = sums[j + 1][1];
-                sums[j + 1][0] = temp_num;
-                sums[j + 1][1] = temp_sum;
-            }
-        }
-    }
-    return sums;
-}
-
-int index_valuation(int number_of_participant) {
-    int percentile;
-    printf("Введите процентиль (от 0 до 100): ");
-    scanf_s("%d", &percentile);
-
-
-    int index = ceil((percentile / 100.0) * number_of_participant) - 1;
-    if (index < 0) index = 0;
-    if (index >= number_of_participant) index = number_of_participant - 1;
-    return index;
-}
-
-void print_table(int** sums, int number_of_participant) {
-    printf("\nРезультаты участников:\n");
-    printf("+-------------------+-------------------+\n");
-    printf("|  Номер участника  |    Общее время    |\n");
-    printf("+-------------------+-------------------+\n");
-    for (int i = 0; i < number_of_participant; i++) {
-        printf("| %-17d | %-17d |\n", sums[i][0], sums[i][1]);
-    }
-    printf("+-------------------+-------------------+\n");
-}
-
-void print_to_file(int** sums, int index) {
-    FILE* file = fopen("C:\\Users\\Admin\\Desktop\\results.txt", "w");
-    fprintf(file, "\nРезультаты участников (по убыванию):\n");
-    fprintf(file, "+-------------------+-------------------+\n");
-    fprintf(file, "| Номер участника   | Сумма баллов      |\n");
-    fprintf(file, "+-------------------+-------------------+\n");
-    for (int i = 0; i < index; i++) {
-        fprintf(file, "| %-17d | %-17d |\n", sums[i][0], sums[i][1]);
-    }
-    fprintf(file, "+-------------------+-------------------+\n");
-    fclose(file);
-}
-
-int main()
+int main() 
 {
     setlocale(LC_ALL, "RUS");
     int percentile;
@@ -200,4 +107,100 @@ int main()
         free(arr[i]);
     }
     free(arr);
+}
+
+int** input_results(int num, int** arr) {
+    for (int i = 0; i < num; i++) {
+        printf("Введите номер участника: ");
+        scanf_s("%d", &arr[i][0]);
+        for (int j = 1; j < 4; j++) {
+            printf("Введите результат участника #%d (попытка %d): ", i + 1, j);
+            scanf_s("%d", &arr[i][j]);
+        }
+    }
+    return arr;
+}
+
+int** random_results(int num, int** arr) {
+    for (int i = 0; i < num; i++) {
+        arr[i][0] = i + 1;
+        for (int j = 1; j < 4; j++) {
+            arr[i][j] = rand() % 100;
+        }
+    }
+    return arr;
+}
+
+int print_results(int num, int** arr) {
+    printf("\nРезультаты участников:\n");
+    printf("+-------------------+-------------------+-------------------+-------------------+\n");
+    printf("| Номер участника   | Первый забег      | Второй забег      | Третий забег      |\n");
+    printf("+-------------------+-------------------+-------------------+-------------------+\n");
+    for (int i = 0; i < num; i++) {
+        printf("| %-17d | %-17d | %-17d | %-17d |\n", arr[i][0], arr[i][1], arr[i][2], arr[i][3]);
+    }
+    printf("+-------------------+-------------------+-------------------+-------------------+\n");
+    return printf("Операция завершена успешно\n");
+}
+
+int** sum_valuation(int num, int** arr, int** sums) {
+    for (int i = 0; i < num; i++) {
+        int sum = 0;
+        for (int j = 1; j < 4; j++) {
+            sum += arr[i][j];
+        }
+        sums[i][0] = arr[i][0];
+        sums[i][1] = sum;
+    }
+    for (int i = 0; i < num - 1; i++) {
+        for (int j = 0; j < num - i - 1; j++) {
+            if (sums[j][1] > sums[j + 1][1]) {
+                int temp_num = sums[j][0];
+                int temp_sum = sums[j][1];
+                sums[j][0] = sums[j + 1][0];
+                sums[j][1] = sums[j + 1][1];
+                sums[j + 1][0] = temp_num;
+                sums[j + 1][1] = temp_sum;
+            }
+        }
+    }
+    return sums;
+}
+
+int index_valuation(int number_of_participant) {
+    int percentile;
+    printf("Введите процентиль (от 0 до 100): ");
+    scanf_s("%d", &percentile);
+
+
+    int index = ceil((percentile / 100.0) * number_of_participant) - 1;
+    if (index < 0) index = 0;
+    if (index >= number_of_participant) index = number_of_participant - 1;
+    return index;
+}
+
+int print_table(int** sums, int number_of_participant) {
+    printf("\nРезультаты участников:\n");
+    printf("+-------------------+-------------------+\n");
+    printf("|  Номер участника  |    Общее время    |\n");
+    printf("+-------------------+-------------------+\n");
+    for (int i = 0; i < number_of_participant; i++) {
+        printf("| %-17d | %-17d |\n", sums[i][0], sums[i][1]);
+    }
+    printf("+-------------------+-------------------+\n");
+    return ("Операция завершена успешно");
+}
+
+int print_to_file(int** sums, int index) {
+    FILE* file = fopen("C:\\Users\\Admin\\Desktop\\results.txt", "w");
+    fprintf(file, "\nРезультаты участников (по убыванию):\n");
+    fprintf(file, "+-------------------+-------------------+\n");
+    fprintf(file, "| Номер участника   | Сумма баллов      |\n");
+    fprintf(file, "+-------------------+-------------------+\n");
+    for (int i = 0; i < index; i++) {
+        fprintf(file, "| %-17d | %-17d |\n", sums[i][0], sums[i][1]);
+    }
+    fprintf(file, "+-------------------+-------------------+\n");
+    fclose(file);
+    return ("Операция завершена успешно");
 }
